@@ -1,0 +1,57 @@
+{
+	"name": "StringifyingDataFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_src_stringify",
+						"type": "DatasetReference"
+					},
+					"name": "fileWithComplexData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sink_stringify",
+						"type": "DatasetReference"
+					},
+					"name": "stringifiedFile"
+				}
+			],
+			"transformations": [
+				{
+					"name": "stringifyer"
+				},
+				{
+					"name": "StringyfingTheComplexColumn"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          district as string,",
+				"          state as string,",
+				"          weather as (rain as string, wind as string, sky as string)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> fileWithComplexData",
+				"fileWithComplexData stringify(weather = weather ? string,",
+				"     partitionBy('hash', 1),",
+				"     format: 'json') ~> stringifyer",
+				"stringifyer derive(weather = toString(weather)) ~> StringyfingTheComplexColumn",
+				"StringyfingTheComplexColumn sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> stringifiedFile"
+			]
+		}
+	}
+}

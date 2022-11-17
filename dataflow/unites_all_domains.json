@@ -1,0 +1,66 @@
+{
+	"name": "unites_all_domains",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_src1_schema_validator",
+						"type": "DatasetReference"
+					},
+					"name": "abinitioResource"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_src2_schema_validator",
+						"type": "DatasetReference"
+					},
+					"name": "pythonResource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sink_schema_validator",
+						"type": "DatasetReference"
+					},
+					"name": "AllDomainSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "union"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as short,",
+				"          name as string,",
+				"          skill as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> abinitioResource",
+				"source(output(",
+				"          id as short,",
+				"          name as string,",
+				"          skill as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> pythonResource",
+				"abinitioResource, pythonResource union(byName: true)~> union",
+				"union sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['employee_skill_details'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> AllDomainSink"
+			]
+		}
+	}
+}

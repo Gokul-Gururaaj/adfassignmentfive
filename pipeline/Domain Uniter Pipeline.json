@@ -1,0 +1,34 @@
+{
+	"name": "Domain Uniter Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "United Domains Of a Company",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "unites_all_domains",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-11-17T09:24:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

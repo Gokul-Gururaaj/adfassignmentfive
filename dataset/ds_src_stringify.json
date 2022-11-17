@@ -1,0 +1,45 @@
+{
+	"name": "ds_src_stringify",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "weather_details.json",
+				"folderPath": "source",
+				"fileSystem": "stringifyingcontainer"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"district": {
+					"type": "string"
+				},
+				"state": {
+					"type": "string"
+				},
+				"weather": {
+					"type": "object",
+					"properties": {
+						"rain": {
+							"type": "string"
+						},
+						"wind": {
+							"type": "string"
+						},
+						"sky": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

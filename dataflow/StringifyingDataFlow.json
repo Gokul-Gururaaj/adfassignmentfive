@@ -27,6 +27,9 @@
 				},
 				{
 					"name": "StringyfingTheComplexColumn"
+				},
+				{
+					"name": "ReplacingSlashes"
 				}
 			],
 			"scriptLines": [
@@ -43,8 +46,10 @@
 				"     partitionBy('hash', 1),",
 				"     format: 'json') ~> stringifyer",
 				"stringifyer derive(weather = toString(weather)) ~> StringyfingTheComplexColumn",
-				"StringyfingTheComplexColumn sink(allowSchemaDrift: true,",
+				"StringyfingTheComplexColumn derive(weather = replace(replace(replace(weather,'\\\\',''),'\\\\',''),'\"','')) ~> ReplacingSlashes",
+				"ReplacingSlashes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['stringifiedFile'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

@@ -1,0 +1,4 @@
+{"district":"chennai","state":"tn","weather":{"rain":"heavy","wind":"strong","sky":"cloudy"}}
+{"district":"tiruvallur","state":"tn","weather":{"rain":"light","wind":"moderate","sky":"cloudy"}}
+{"district":"kanchi","state":"tn","weather":{"rain":"drizzle","wind":"strong",,"sky":"overcast"}}
+
